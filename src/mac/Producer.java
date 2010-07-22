@@ -20,12 +20,24 @@ public class Producer extends Thread {
     }
 
     private double getDelay() {
-        Random r = new Random();
-        return -Math.log(r.nextDouble()) * lambda;
+//        Random r = new Random();
+//        return -Math.log(r.nextDouble()) * lambda;
+    	return Math.random() * lambda;
     }
     
     private void produce() {
-        buffer.add(new Message());
+    	try {
+    		synchronized (buffer) {
+    			while (buffer.size() == 10)
+    				buffer.wait();
+    			Thread.sleep((int)getDelay());
+    			buffer.add(new Message());
+    			buffer.notifyAll();
+    		}
+    	}
+    	catch (InterruptedException e) {
+    		System.err.println(e);
+    	}
     }
     
     public String toString() {
@@ -35,19 +47,9 @@ public class Producer extends Thread {
     }
     
     public void run() {
-        try {
-            while (true) {
-                synchronized (buffer) {
-                    while (buffer.size() == 10)
-                        buffer.wait();
-                    Thread.sleep((int)getDelay());
-                    produce();
-                    buffer.notifyAll();
-                }
-            }
-        }
-        catch (InterruptedException e) {
-        }
+    	while (true) {
+    		produce();
+    	}
     }
 
     /**

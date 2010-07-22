@@ -23,17 +23,40 @@ public class Consumer extends Thread {
         this.buffer = buffer;
     }
     
-    private Message consume() { return new Message(); }
+    private Message consume() { 
+    	Message m = null;
+    	
+    	try {
+    		synchronized (buffer) {
+    			while (buffer.size() == 0) {
+    				buffer.wait();
+    			}
+    			m = buffer.remove(0);
+    			buffer.notifyAll();
+    		}
+    	} catch (InterruptedException e) { System.err.println(e); }
+    	
+    	return m;
+    	
+    }
     
-    public void run() {}
+    public void run() {
+    	while (true) {
+    		Message m = consume();
+    	}
+    }
 
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
-
+    	ArrayList<Message> list = new ArrayList<Message>();
+    	Consumer c = new Consumer(null, list);
+    	Producer p = new Producer(list);
+    	Producer.lambda = 200.0;
+    	c.start();
+    	p.start();
     }
 
 }
