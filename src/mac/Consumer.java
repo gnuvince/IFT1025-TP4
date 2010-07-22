@@ -47,6 +47,7 @@ public class Consumer extends Thread {
     				while (channel.isOccupied()) {
     					m.incrementRejections();
     					waitTime = policy.getNewWaitTime(waitTime);
+    					System.out.println("  >>  " + waitTime);
     					channel.wait(waitTime);
     				}
     				m.setAccepted(System.currentTimeMillis());

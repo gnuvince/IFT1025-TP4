@@ -24,11 +24,11 @@ public class Channel {
         return receivedMessages;
     }
     
-    public void send(Message m) {
+    public void send(Message m) throws InterruptedException {
     	occupied = true;
     	
     	receivedMessages.add(m);
-    	
+
     	occupied = false;
     }
 
@@ -39,13 +39,14 @@ public class Channel {
     public static void main(String[] args) {
     	Producer.lambda = 200.0;
     	Channel ch = new Channel();
-    	Node n = new Node(ch);
-    	n.start();
+    	
+    	for (int i = 0; i < 10; ++i)
+    		new Node(ch).start();
     	
     	try {
     		while (ch.receivedMessages.size() < messageLimit) {
     			Thread.sleep(20);
-    			System.out.println(ch.receivedMessages.size());
+    			System.out.println("msg count: " + ch.receivedMessages.size());
     		}
     		
     		System.out.println(Statistics.process(ch));
