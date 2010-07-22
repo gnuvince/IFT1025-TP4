@@ -16,11 +16,12 @@ public class Consumer extends Thread {
 
     private ArrayList<Message> buffer;
     private Channel channel;
-    
+    private int waitTime;
     
     public Consumer (Channel channel, ArrayList<Message> buffer) {
         this.channel = channel;
         this.buffer = buffer;
+        this.waitTime = 1;
     }
     
     private Message consume() { 
@@ -41,8 +42,22 @@ public class Consumer extends Thread {
     }
     
     public void run() {
-    	while (true) {
-    		Message m = consume();
+    	try {
+    		while (true) {
+    			Message m = consume();
+    			synchronized (channel) {
+    				while (channel.isOccupied()) {
+    					m.incrementRejections();
+    					waitTime = policy.getNewWaitTime(waitTime);
+    					channel.wait(waitTime);
+    				}
+    				m.setAccepted(System.nanoTime());
+    				channel.send(m);
+    				channel.notifyAll();
+    			}
+    		}
+    	}
+    	catch (InterruptedException e) {
     	}
     }
 
