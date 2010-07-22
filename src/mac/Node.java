@@ -18,11 +18,11 @@ public class Node extends Thread {
     private ArrayList<Message> buffer;
     private Channel channel;
     
-    public Node(Channel channel) {
+    public Node(Channel channel, int id) {
         this.channel = channel;
         this.buffer = new ArrayList<Message>(BUFFER_LIMIT);
         this.producer = new Producer(buffer);
-        this.consumer = new Consumer(channel, buffer);
+        this.consumer = new Consumer(channel, buffer, id);
     }
     
     @Override

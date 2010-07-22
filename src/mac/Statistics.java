@@ -39,11 +39,11 @@ public class Statistics {
     
     public static String process(Channel c) { 
         Statistics stats = new Statistics(c.getReceivedMessages());
-        Formatter format = new Formatter();
         StringBuilder sb = new StringBuilder();
+        Formatter format = new Formatter(sb);
         
-        sb.append(format.format("Temps d'attente moyen : %8.4f ms\n", stats.averageWaitTime()));
-        sb.append(format.format("Nombre de rejets moyen: %8.4f\n", stats.averageRejections()));
+        format.format("Temps d'attente moyen : %8.4f ms\n", stats.averageWaitTime());
+        format.format("Nombre de rejets moyen: %8.4f\n", stats.averageRejections());
         
         return sb.toString();
     }

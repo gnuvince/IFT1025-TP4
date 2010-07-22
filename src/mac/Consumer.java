@@ -14,14 +14,16 @@ public class Consumer extends Thread {
     private static final Policy DEFAULT_POLICY = new DoubleWaitTime();
     public static Policy policy = DEFAULT_POLICY;
 
+    private int id;
     private ArrayList<Message> buffer;
     private Channel channel;
     private int waitTime;
     
-    public Consumer (Channel channel, ArrayList<Message> buffer) {
+    public Consumer (Channel channel, ArrayList<Message> buffer, int id) {
+    	this.id = id;
         this.channel = channel;
         this.buffer = buffer;
-        this.waitTime = 1;
+        this.waitTime = 55;
     }
     
     private Message consume() throws InterruptedException { 
@@ -44,6 +46,7 @@ public class Consumer extends Thread {
     		synchronized (channel) {
     			while (true) {
     				Message m = consume();
+    				System.out.println("ID: " + id);
     				while (channel.isOccupied()) {
     					m.incrementRejections();
     					waitTime = policy.getNewWaitTime(waitTime);
@@ -59,18 +62,4 @@ public class Consumer extends Thread {
     	catch (InterruptedException e) {
     	}
     }
-
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-    	ArrayList<Message> list = new ArrayList<Message>();
-    	Consumer c = new Consumer(null, list);
-    	Producer p = new Producer(list);
-    	Producer.lambda = 200.0;
-    	c.start();
-    	p.start();
-    }
-
 }
