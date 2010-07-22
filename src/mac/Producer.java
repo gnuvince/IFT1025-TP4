@@ -3,8 +3,8 @@
  */
 package mac;
 
+import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * @author foleybov
@@ -13,9 +13,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class Producer extends Thread {
     private static final double DEFAULT_LAMBDA = 1000;
     public static double lambda = DEFAULT_LAMBDA;
-    private LinkedBlockingQueue<Message> buffer;
+    private ArrayList<Message> buffer;
 
-    public Producer(LinkedBlockingQueue<Message> buffer) {
+    public Producer(ArrayList<Message> buffer) {
         this.buffer = buffer;
     }
 
@@ -28,12 +28,19 @@ public class Producer extends Thread {
         buffer.add(new Message());
     }
     
+    public String toString() {
+        synchronized (buffer) {
+            return buffer.toString();
+        }
+    }
+    
     public void run() {
         try {
             while (true) {
                 synchronized (buffer) {
                     while (buffer.size() == 10)
                         buffer.wait();
+                    Thread.sleep((int)getDelay());
                     produce();
                     buffer.notifyAll();
                 }
@@ -47,8 +54,17 @@ public class Producer extends Thread {
      * @param args
      */
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
-
+        try {
+            Producer p = new Producer(new ArrayList<Message>());
+            p.start();
+            while (true) {
+                System.out.println(p);
+                Thread.sleep(100);
+            }
+        }
+        catch (InterruptedException e) {
+            
+        }
     }
 
 }

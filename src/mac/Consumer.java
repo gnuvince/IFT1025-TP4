@@ -3,7 +3,8 @@
  */
 package mac;
 
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.ArrayList;
+
 
 /**
  * @author foleybov
@@ -13,11 +14,11 @@ public class Consumer extends Thread {
     private static final Policy DEFAULT_POLICY = new DoubleWaitTime();
     public static Policy policy = DEFAULT_POLICY;
 
-    private LinkedBlockingQueue<Message> buffer;
+    private ArrayList<Message> buffer;
     private Channel channel;
     
     
-    public Consumer (Channel channel, LinkedBlockingQueue<Message> buffer) {
+    public Consumer (Channel channel, ArrayList<Message> buffer) {
         this.channel = channel;
         this.buffer = buffer;
     }
