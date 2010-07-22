@@ -21,13 +21,27 @@ public class Producer extends Thread {
 
     private double getDelay() {
         Random r = new Random();
-        
         return -Math.log(r.nextDouble()) * lambda;
     }
     
-    private void produce() {}
+    private void produce() {
+        buffer.add(new Message());
+    }
     
-    public void run() {}
+    public void run() {
+        try {
+            while (true) {
+                synchronized (buffer) {
+                    while (buffer.size() == 10)
+                        buffer.wait();
+                    produce();
+                    buffer.notifyAll();
+                }
+            }
+        }
+        catch (InterruptedException e) {
+        }
+    }
 
     /**
      * @param args
