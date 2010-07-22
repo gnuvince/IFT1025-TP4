@@ -10,4 +10,5 @@ package mac;
 public interface Policy {
     
     int getNewWaitTime(int currentWaitTime);
+    int getInitialWaitTime();
 }

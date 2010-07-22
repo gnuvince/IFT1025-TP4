@@ -9,31 +9,69 @@ import java.util.ArrayList;
  * @author foleybov
  */
 public class Channel {
-	public static int messageLimit = 100;
+	public static final int WRITE_TIME = 100;
+	public static int messageLimit = 20;
 
 	private ArrayList<Message> receivedMessages;
     private boolean occupied;
+    private boolean collisionDetected;
     
     public Channel() {
     	receivedMessages = new ArrayList<Message>();
-    	messageLimit = 100;
     	occupied = false;
+    	collisionDetected = false;
     }
 
     public ArrayList<Message> getReceivedMessages() {
         return receivedMessages;
     }
     
-    public void send(Message m) throws InterruptedException {
-    	occupied = true;
-    	
-    	receivedMessages.add(m);
-
-    	occupied = false;
-    }
-
-    public boolean isOccupied() {
-    	return occupied;
+    public boolean send(Message m) throws InterruptedException {
+    	synchronized (this) {
+    		// Oh non! Quelqu'un utilise le channel en meme temps que moi!
+    		if (occupied) {
+    			// On va indiquer qu'on a une collision
+    			collisionDetected = true;
+    			
+    			// On va avertir le gars qui essaye d'ecrire qu'on est en collision
+    			this.notifyAll();
+    			
+    			// Je retourne false parce que j'ai pas reussi a ecrire sur le channel
+    			return false;
+    		}
+    		
+    		// Yay! Personne sur le channel
+    		else {
+    			// Je vais indiquer que le channel est occupe
+    			occupied = true;
+    			
+    			// Ca prend un certain temps ecrire sur le channel..
+    			this.wait(WRITE_TIME);
+    			
+    			// Quelqu'un a voulu acceder au channel pendant que j'ecrivais :(
+    			if (collisionDetected) {
+    				// On sort du channel, donc il y a plus de collision
+    				collisionDetected = false;
+    				
+    				// Je sors, donc le channel est plus occupe
+    				occupied = false;
+    				
+    				// J'ai pas reussi a ecrire sur le channel
+    				return false;    				
+    			}
+    			// Yay! J'ai fini d'ecrire!
+    			else {
+    				// On ajoute le message
+    				receivedMessages.add(m);
+    				
+    				// Je sors, donc le channel est plus occupe
+    				occupied = false;
+    				
+    				// Mission accomplie!
+    				return true;
+    			}
+    		}
+    	}
     }
     
     public static void main(String[] args) {
@@ -41,8 +79,8 @@ public class Channel {
     	Channel ch = new Channel();
     	ArrayList<Node> nodes = new ArrayList<Node>();
     	
-    	for (int i = 0; i < 10; ++i) {
-    		Node n = new Node(ch, i);
+    	for (int i = 0; i < 20; ++i) {
+    		Node n = new Node(ch);
     		nodes.add(n);
     		n.start();
     	}

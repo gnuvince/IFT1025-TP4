@@ -11,19 +11,15 @@ import java.util.ArrayList;
  *
  */
 public class Consumer extends Thread {
-    private static final Policy DEFAULT_POLICY = new DoubleWaitTime();
+    private static final Policy DEFAULT_POLICY = new DoubleWaitDeltaPolicy();
     public static Policy policy = DEFAULT_POLICY;
 
-    private int id;
     private ArrayList<Message> buffer;
     private Channel channel;
-    private int waitTime;
     
-    public Consumer (Channel channel, ArrayList<Message> buffer, int id) {
-    	this.id = id;
+    public Consumer (Channel channel, ArrayList<Message> buffer) {
         this.channel = channel;
         this.buffer = buffer;
-        this.waitTime = 55;
     }
     
     private Message consume() throws InterruptedException { 
@@ -43,19 +39,23 @@ public class Consumer extends Thread {
     
     public void run() {
     	try {
-    		synchronized (channel) {
+    		synchronized (buffer) {
     			while (true) {
+    				int sleepTime = policy.getInitialWaitTime();
     				Message m = consume();
-    				System.out.println("ID: " + id);
-    				while (channel.isOccupied()) {
+    				// Tant qu'on a pas reussi a envoyer notre message sur le channel
+    				while (!channel.send(m)) {
+    					// On prend note de notre echec lamentable
     					m.incrementRejections();
-    					waitTime = policy.getNewWaitTime(waitTime);
-    					System.out.println("  >>  " + waitTime);
-    					channel.wait(waitTime);
+    					
+    					// On calcule combien de temps passer dans le coin
+    					sleepTime = policy.getNewWaitTime(sleepTime);
+    					
+    					// On attend un petit peu avant de recommencer
+    					Thread.sleep(sleepTime);
     				}
     				m.setAccepted(System.currentTimeMillis());
-    				channel.send(m);
-    				channel.notifyAll();
+    				buffer.notifyAll();
     			}
     		}
     	}

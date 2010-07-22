@@ -37,13 +37,37 @@ public class Statistics {
         return totalRejections / messageList.size();
     }
     
+    private int maxRejections() {
+    	int max = Integer.MIN_VALUE;
+    	
+    	for (Message m: messageList) {
+    		if (m.getRejections() > max)
+    			max = m.getRejections();
+    	}
+    	
+    	return max;
+    }
+    
+    private int minRejections() {
+    	int min = Integer.MAX_VALUE;
+    	
+    	for (Message m: messageList) {
+    		if (m.getRejections() < min)
+    			min = m.getRejections();
+    	}
+    	
+    	return min;
+    }
+    
     public static String process(Channel c) { 
         Statistics stats = new Statistics(c.getReceivedMessages());
         StringBuilder sb = new StringBuilder();
         Formatter format = new Formatter(sb);
         
-        format.format("Temps d'attente moyen : %8.4f ms\n", stats.averageWaitTime());
-        format.format("Nombre de rejets moyen: %8.4f\n", stats.averageRejections());
+        format.format("Temps d'attente moyen   : %.4f ms\n", stats.averageWaitTime());
+        format.format("Nombre de rejets minimal: %d\n", stats.minRejections());
+        format.format("Nombre de rejets moyen  : %.4f\n", stats.averageRejections());
+        format.format("Nombre de rejets maximal: %d\n", stats.maxRejections());
         
         return sb.toString();
     }
