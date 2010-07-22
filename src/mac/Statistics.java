@@ -42,8 +42,8 @@ public class Statistics {
         Formatter format = new Formatter();
         StringBuilder sb = new StringBuilder();
         
-        sb.append(format.format("Temps d'attente moyen : %8d ms\n", stats.averageWaitTime()));
-        sb.append(format.format("Nombre de rejets moyen: %8d\n", stats.averageRejections()));
+        sb.append(format.format("Temps d'attente moyen : %8.4f ms\n", stats.averageWaitTime()));
+        sb.append(format.format("Nombre de rejets moyen: %8.4f\n", stats.averageRejections()));
         
         return sb.toString();
     }

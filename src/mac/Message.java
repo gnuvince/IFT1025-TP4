@@ -15,7 +15,7 @@ public class Message {
     
     
     public Message() {
-        this.creation = System.nanoTime();
+        this.creation = System.currentTimeMillis();
         this.accepted = 0;
         this.rejections = 0;
     }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * @author foleybov
  *
  */
-public class Node {
+public class Node extends Thread {
     private static final int BUFFER_LIMIT = 10;
     private static Policy policy;
     
@@ -21,5 +21,25 @@ public class Node {
     public Node(Channel channel) {
         this.channel = channel;
         this.buffer = new ArrayList<Message>(BUFFER_LIMIT);
+        this.producer = new Producer(buffer);
+        this.consumer = new Consumer(channel, buffer);
+    }
+    
+    @Override
+    public void run() {
+    	producer.start();
+    	consumer.start();
+    	
+    	try {
+    		while (channel.getReceivedMessages().size() < Channel.messageLimit) {
+    			Thread.sleep(100);
+    		}
+    	}
+    	catch (InterruptedException e) {
+    		System.err.println(e);
+    	}
+    	
+    	producer.interrupt();
+    	consumer.interrupt();
     }
 }

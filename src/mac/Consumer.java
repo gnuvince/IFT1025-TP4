@@ -24,18 +24,16 @@ public class Consumer extends Thread {
         this.waitTime = 1;
     }
     
-    private Message consume() { 
+    private Message consume() throws InterruptedException { 
     	Message m = null;
     	
-    	try {
-    		synchronized (buffer) {
-    			while (buffer.size() == 0) {
-    				buffer.wait();
-    			}
-    			m = buffer.remove(0);
-    			buffer.notifyAll();
+    	synchronized (buffer) {
+    		while (buffer.size() == 0) {
+    			buffer.wait();
     		}
-    	} catch (InterruptedException e) { System.err.println(e); }
+    		m = buffer.remove(0);
+    		buffer.notifyAll();
+    	}
     	
     	return m;
     	
@@ -43,15 +41,15 @@ public class Consumer extends Thread {
     
     public void run() {
     	try {
-    		while (true) {
-    			Message m = consume();
-    			synchronized (channel) {
+    		synchronized (channel) {
+    			while (true) {
+    				Message m = consume();
     				while (channel.isOccupied()) {
     					m.incrementRejections();
     					waitTime = policy.getNewWaitTime(waitTime);
     					channel.wait(waitTime);
     				}
-    				m.setAccepted(System.nanoTime());
+    				m.setAccepted(System.currentTimeMillis());
     				channel.send(m);
     				channel.notifyAll();
     			}

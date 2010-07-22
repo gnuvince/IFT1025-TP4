@@ -25,18 +25,13 @@ public class Producer extends Thread {
     	return Math.random() * lambda;
     }
     
-    private void produce() {
-    	try {
-    		synchronized (buffer) {
-    			while (buffer.size() == 10)
-    				buffer.wait();
-    			Thread.sleep((int)getDelay());
-    			buffer.add(new Message());
-    			buffer.notifyAll();
-    		}
-    	}
-    	catch (InterruptedException e) {
-    		System.err.println(e);
+    private void produce() throws InterruptedException {
+    	synchronized (buffer) {
+    		while (buffer.size() == 10)
+    			buffer.wait();
+    		Thread.sleep((int)getDelay());
+    		buffer.add(new Message());
+    		buffer.notifyAll();
     	}
     }
     
@@ -47,8 +42,12 @@ public class Producer extends Thread {
     }
     
     public void run() {
-    	while (true) {
-    		produce();
+    	try {
+    		while (true) {
+    			produce();
+    		}
+    	}
+    	catch (InterruptedException e) {
     	}
     }
 
