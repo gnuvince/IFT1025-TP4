@@ -20,9 +20,8 @@ public class Producer extends Thread {
     }
 
     private double getDelay() {
-//        Random r = new Random();
-//        return -Math.log(r.nextDouble()) * lambda;
-    	return Math.random() * lambda;
+        Random r = new Random();
+        return -Math.log(r.nextDouble()) * lambda;
     }
     
     private void produce() throws InterruptedException {
@@ -50,22 +49,4 @@ public class Producer extends Thread {
     	catch (InterruptedException e) {
     	}
     }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        try {
-            Producer p = new Producer(new ArrayList<Message>());
-            p.start();
-            while (true) {
-                System.out.println(p);
-                Thread.sleep(100);
-            }
-        }
-        catch (InterruptedException e) {
-            
-        }
-    }
-
 }

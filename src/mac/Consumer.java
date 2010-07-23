@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  */
 public class Consumer extends Thread {
-    private static final Policy DEFAULT_POLICY = new DoubleWaitDeltaPolicy();
+    public static final Policy DEFAULT_POLICY = new DoubleWaitDeltaPolicy();
     public static Policy policy = DEFAULT_POLICY;
 
     private ArrayList<Message> buffer;

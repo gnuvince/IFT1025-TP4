@@ -11,7 +11,6 @@ import java.util.ArrayList;
  */
 public class Node extends Thread {
     private static final int BUFFER_LIMIT = 10;
-    private static Policy policy;
     
     private Producer producer;
     private Consumer consumer;
