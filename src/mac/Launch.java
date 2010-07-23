@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Launch {
 	
 	private static final Policy[] POLICIES = {
-		new DoubleWaitTime(), 
+		new DoubleWaitPolicy(), 
 		new DoubleWaitDeltaPolicy(),
 		new FibonacciPolicy(),
 	};

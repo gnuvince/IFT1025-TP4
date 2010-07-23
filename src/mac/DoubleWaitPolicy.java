@@ -7,7 +7,7 @@ package mac;
  * @author foleybov
  *
  */
-public class DoubleWaitTime implements Policy {
+public class DoubleWaitPolicy implements Policy {
     @Override
     public int getNewWaitTime(int currentWaitTime) {
         return 2 * currentWaitTime;
