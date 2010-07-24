@@ -6,15 +6,26 @@ package mac;
 import java.util.ArrayList;
 
 /**
+ * La classe qui représente l'objet canal sur lequel les messages doivent
+ * êtres envoyés.
+ * 
  * @author foleybov
  */
 public class Channel {
-	public static final int WRITE_TIME = 100;
+    // Le temps (en millisecondes) requis pour écrire un message
+    public static final int WRITE_TIME = 100;
+    
+    // Le nombre de messages à recevoir avant de quitter
 	public static int messageLimit = 1000;
 
+	// La liste des messages reçus (afin de compiler des statistiques)
 	private ArrayList<Message> receivedMessages;
+	
+	// Variables qui déterminent si le canal est occupé et si 
+	// un collision s'est produite.
     private boolean occupied;
     private boolean collisionDetected;
+    
     
     public Channel() {
     	receivedMessages = new ArrayList<Message>();
@@ -22,10 +33,18 @@ public class Channel {
     	collisionDetected = false;
     }
 
+    
     public ArrayList<Message> getReceivedMessages() {
         return receivedMessages;
     }
     
+    
+    /**
+     * Méthode qui sert à envoyer un message sur le canal
+     * @param m le message à envoyer
+     * @return si le message a été envoyé avec succès ou non.
+     * @throws InterruptedException si le thread est interrompu durant l'envoi.
+     */
     public boolean send(Message m) throws InterruptedException {
     	synchronized (this) {
     		// Oh non! Quelqu'un utilise le channel en meme temps que moi!

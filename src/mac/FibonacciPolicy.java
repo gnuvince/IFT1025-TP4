@@ -1,5 +1,10 @@
 package mac;
 
+/**
+ * Politique qui attend selon les nombres de la suite de fibonacci.  Étant
+ * donné un temps d'attente, la politique trouve le fibonnaci suivant et
+ * retourne ce nouveau délai d'attente. 
+ */
 public class FibonacciPolicy implements Policy {
 
 	@Override

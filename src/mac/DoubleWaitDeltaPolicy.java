@@ -1,5 +1,9 @@
 package mac;
 
+/**
+ * Politique qui consiste à doubler le temps d'attente précédent et d'y ajouter/
+ * soustraire 10%. 
+ */
 public class DoubleWaitDeltaPolicy implements Policy {
 	@Override
     public int getNewWaitTime(int currentWaitTime) {

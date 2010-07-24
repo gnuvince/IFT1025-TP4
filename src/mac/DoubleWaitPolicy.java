@@ -1,11 +1,7 @@
-/**
- * 
- */
 package mac;
 
 /**
- * @author foleybov
- *
+ * Politique qui double le temps d'attente précédent.
  */
 public class DoubleWaitPolicy implements Policy {
     @Override
