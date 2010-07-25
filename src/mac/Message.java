@@ -1,19 +1,21 @@
-/**
- * 
- */
 package mac;
 
 /**
- * @author foleybov
+ * Classe représentant un message a être envoyé.
+ * Contient les temps de création et d'acceptation (transmission)
+ * et le nombre de collisions.
  *
  */
 public class Message {
+	// Temps de la création du message
     private long creation;
+    
+    // Temps de la transmission du message
     private long accepted;
+    
+    // Nombre de collisions avant de réussir à envoyer le message
     private int rejections;
-    
-    
-    
+        
     public Message() {
         this.creation = System.currentTimeMillis();
         this.accepted = 0;

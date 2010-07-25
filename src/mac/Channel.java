@@ -1,6 +1,3 @@
-/**
- * 
- */
 package mac;
 
 import java.util.ArrayList;
@@ -49,6 +46,7 @@ public class Channel {
     	synchronized (this) {
     		// Oh non! Quelqu'un utilise le channel en meme temps que moi!
     		if (occupied) {
+//    			System.out.println("Collision!");
     			// On va indiquer qu'on a une collision
     			collisionDetected = true;
     			

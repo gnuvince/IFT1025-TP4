@@ -142,6 +142,8 @@ public class Launch {
     		System.out.println(Statistics.process(ch));
     	}
     	catch (InterruptedException e) {
+    		for (Node node: nodes)
+    			node.interrupt();
     	}
     }
 }

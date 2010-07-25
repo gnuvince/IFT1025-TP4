@@ -1,10 +1,6 @@
-/**
- * 
- */
 package mac;
 
 import java.util.ArrayList;
-
 
 /**
  * Classe dérivée de thread qui représente la partie consommateur d'un noeud.
@@ -44,6 +40,7 @@ public class Consumer extends Thread {
     	
     	synchronized (buffer) {
     		while (buffer.size() == 0) {
+//    			System.out.println("buffer vide!");
     			buffer.wait();
     		}
     		m = buffer.remove(0);
@@ -64,10 +61,12 @@ public class Consumer extends Thread {
      */
     @Override
     public void run() {
+    	int sleepTime;
+    	
     	try {
     		synchronized (buffer) {
     			while (true) {
-    				int sleepTime = policy.getInitialWaitTime();
+    				sleepTime = policy.getInitialWaitTime();
     				Message m = consume();
     				// Tant qu'on a pas reussi a envoyer notre message sur le channel
     				while (!channel.send(m)) {
@@ -81,7 +80,7 @@ public class Consumer extends Thread {
     					Thread.sleep(sleepTime);
     				}
     				m.setAccepted(System.currentTimeMillis());
-    				buffer.notifyAll();
+//    				buffer.notifyAll();
     			}
     		}
     	}

@@ -1,5 +1,10 @@
 package mac;
 
+/**
+ * Classe utilitaire pour afficher une ProgressBar textuelle
+ * 
+ * @author foleybov
+ */
 public class TextProgressBar {
 	public static String getProgressBar(double percentage) {
 		int length = 50;

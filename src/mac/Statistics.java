@@ -1,22 +1,29 @@
-/**
- * 
- */
 package mac;
 
 import java.util.ArrayList;
 import java.util.Formatter;
 
 /**
+ * Classe produisant le rapport des statistiques.
+ * 
  * @author foleybov
- *
  */
 public class Statistics {
+	// La liste des messages envoyés + timestamps
     private ArrayList<Message> messageList;
     
+    /**
+     * Constructeur
+	 * @param list la liste des messages envoyés + timestamps
+     */
     public Statistics(ArrayList<Message> list) {
         messageList = list;
     }
     
+    /**
+     * Calcul du temps moyen d'attente par message
+     * @return le temps moyen d'attente pour des messages
+     */
     private double averageWaitTime() {
         double totalWaitTime = 0.0;
         
@@ -27,6 +34,10 @@ public class Statistics {
         return totalWaitTime / messageList.size();
     }
     
+    /**
+     * Nombre moyen de collision par message
+     * @return le nombre moyen de collision par message
+     */
     private double averageRejections() {
         double totalRejections = 0.0;
         
@@ -36,7 +47,11 @@ public class Statistics {
         
         return totalRejections / messageList.size();
     }
-    
+
+    /**
+     * Nombre maximal de collision pour un message
+     * @return le nombre maximal de collision pour un message
+     */
     private int maxRejections() {
     	int max = Integer.MIN_VALUE;
     	
@@ -47,7 +62,11 @@ public class Statistics {
     	
     	return max;
     }
-    
+
+    /**
+     * Nombre minimal de collision pour un message
+     * @return le nombre minimal de collision pour un message
+     */
     private int minRejections() {
     	int min = Integer.MAX_VALUE;
     	
@@ -58,7 +77,11 @@ public class Statistics {
     	
     	return min;
     }
-    
+
+    /**
+     * Calcule et retourne les statistiques
+     * @return une chaîne contenant les statistiques
+     */
     public static String process(Channel c) { 
         Statistics stats = new Statistics(c.getReceivedMessages());
         StringBuilder sb = new StringBuilder();

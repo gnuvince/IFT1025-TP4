@@ -1,11 +1,8 @@
-/**
- * 
- */
 package mac;
 
 /**
- * @author foleybov
- *
+ * Interface decrivant les méthodes communes à toutes les politiques
+ * d'attente en cas de collision.
  */
 public interface Policy {
     
