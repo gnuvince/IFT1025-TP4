@@ -9,7 +9,7 @@ public class FibonacciPolicy implements Policy {
 
 	@Override
 	public int getInitialWaitTime() {
-		return 1;
+        return nextFib(Channel.WRITE_TIME);
 	}
 
 	@Override

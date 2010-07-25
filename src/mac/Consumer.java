@@ -74,7 +74,7 @@ public class Consumer extends Thread {
     					m.incrementRejections();
     					
     					// On calcule combien de temps passer dans le coin
-    					sleepTime = policy.getNewWaitTime(sleepTime);
+    					sleepTime = (int) (-Math.log(Math.random()) * policy.getNewWaitTime(sleepTime));
     					
     					// On attend un petit peu avant de recommencer
     					Thread.sleep(sleepTime);

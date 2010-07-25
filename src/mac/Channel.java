@@ -13,7 +13,7 @@ public class Channel {
     public static final int WRITE_TIME = 100;
     
     // Le nombre de messages à recevoir avant de quitter
-	public static int messageLimit = 1000;
+	public static int messageLimit = 100;
 
 	// La liste des messages reçus (afin de compiler des statistiques)
 	private ArrayList<Message> receivedMessages;

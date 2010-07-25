@@ -10,6 +10,6 @@ public class DoubleWaitPolicy implements Policy {
     }
 
     public int getInitialWaitTime() {
-    	return 1;
+        return Channel.WRITE_TIME;
     }
 }
