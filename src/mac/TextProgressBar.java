@@ -3,19 +3,14 @@ package mac;
 public class TextProgressBar {
 	public static String getProgressBar(double percentage) {
 		int length = 50;
-		String bar = "";
-		String empty = "";
-		
-		for (int i = 0; i < length; ++i) {
-			bar += "=";
-			empty += " ";
-		}
-		
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append('|');
-		sb.append(bar.substring(0, (int)(length * percentage)));
-		sb.append(empty.substring(0, length - (int)(length * percentage)));
+
+		int current = (int)(length * percentage);
+		for (int i = 0; i < current; ++i) sb.append('=');
+		for (int i = 0; i < length - current; ++i) sb.append(' ');
+		
 		sb.append('|');
 		sb.append(String.format(" %.1f%% ", percentage * 100));
 		
