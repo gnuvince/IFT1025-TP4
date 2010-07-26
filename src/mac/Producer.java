@@ -40,7 +40,6 @@ public class Producer extends Thread {
      * @return vrai si un message a été créé, faux sinon (buffer plein)
      */
     private boolean produce() {
-    	
     	if (buffer.size() == 10)
     		return false;
     	else {

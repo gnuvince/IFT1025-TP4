@@ -1,6 +1,7 @@
 package mac;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Formatter;
 
 /**
@@ -28,10 +29,47 @@ public class Statistics {
         double totalWaitTime = 0.0;
         
         for (Message m: messageList) {
-            totalWaitTime += (m.getAccepted() - m.getCreation());
+            totalWaitTime += m.waitTime();
         }
         
         return totalWaitTime / messageList.size();
+    }
+    
+    private long minWaitTime() {
+        long min = Integer.MAX_VALUE;
+        
+        for (Message m: messageList) {
+            if (m.waitTime() < min)
+                min = m.waitTime();
+        }
+        
+        return min;
+    }
+    
+    
+    private long maxWaitTime() {
+        long max = Integer.MIN_VALUE;
+        
+        for (Message m: messageList) {
+            if (m.waitTime() > max)
+                max = m.waitTime();
+        }
+        
+        return max;
+    }
+    
+    
+    private long medianWaitTime() {
+        long[] waitTimes = new long[messageList.size()];
+        for (int i = 0; i < waitTimes.length; ++i)
+            waitTimes[i] = messageList.get(i).waitTime();
+        
+        Arrays.sort(waitTimes);
+        int mid = waitTimes.length / 2;
+        if (waitTimes.length % 2 == 0)
+            return (waitTimes[mid] + waitTimes[mid + 1]) / 2;
+        else
+            return waitTimes[mid];
     }
     
     /**
@@ -77,6 +115,20 @@ public class Statistics {
     	
     	return min;
     }
+    
+    
+    private int medianRejections() {
+        int[] rejections = new int[messageList.size()];
+        for (int i = 0; i < rejections.length; ++i)
+            rejections[i] = messageList.get(i).getRejections();
+        
+        Arrays.sort(rejections);
+        int mid = rejections.length / 2;
+        if (rejections.length % 2 == 0)
+            return (rejections[mid] + rejections[mid + 1]) / 2;
+        else
+            return rejections[mid];
+    }
 
     /**
      * Calcule et retourne les statistiques
@@ -87,9 +139,13 @@ public class Statistics {
         StringBuilder sb = new StringBuilder();
         Formatter format = new Formatter(sb);
         
+        format.format("Temps d'attente minimal : %d ms\n", stats.minWaitTime());
         format.format("Temps d'attente moyen   : %.4f ms\n", stats.averageWaitTime());
+        format.format("Temps d'attente médian  : %d ms\n", stats.medianWaitTime());
+        format.format("Temps d'attente maximal : %d ms\n", stats.maxWaitTime());
         format.format("Nombre de rejets minimal: %d\n", stats.minRejections());
         format.format("Nombre de rejets moyen  : %.4f\n", stats.averageRejections());
+        format.format("Nombre de rejets médian : %d\n", stats.medianRejections());
         format.format("Nombre de rejets maximal: %d\n", stats.maxRejections());
         
         return sb.toString();

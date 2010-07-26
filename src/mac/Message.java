@@ -25,23 +25,39 @@ public class Message {
     public long getCreation() {
         return creation;
     }
+    
     public void setCreation(long creation) {
         this.creation = creation;
     }
+    
     public long getAccepted() {
         return accepted;
     }
+    
     public void setAccepted(long accepted) {
         this.accepted = accepted;
     }
+    
     public int getRejections() {
         return rejections;
     }
+    
     public void setRejections(int rejections) {
         this.rejections = rejections;
     }
     
+    /** 
+     * Incrémente le nombre de rejets.
+     */
     public void incrementRejections() {
         this.rejections++;
+    }
+    
+    /**
+     * @return le temps écoulé entre la création d'un message et son acceptation
+     * sur le canal
+     */
+    public long waitTime() {
+        return getAccepted() - getCreation();
     }
 }
