@@ -1,0 +1,36 @@
+IFT1025 TP4 - Simulation Ethernet
+
+AUTEURS
+=======
+
+Vincent Foley-Bourgon - FOLV08078309 - foleybov@iro.umontreal.ca
+Éric Thivierge        - THIE09016601 - eric@thivierge.org
+
+DESCIPTION
+==========
+
+Ce programme simule l'accès concurrent à un canal de communication par un
+certain nombre de noeuds.  Si deux noeuds tente d'envoyer un message au
+canal en même temps, une collision est détecté et les deux noeuds doivent
+attendre pendant un certain délai avant de tenter une retransmission.
+
+
+UTILISATION
+===========
+
+$ java mac.Launch <lambda> <n> [<# politique>]
+
+lambda: un entier positif qui donne le délai entre la création des messages que
+        le noeud doit envoyer au canal.
+
+n:      un entier positif qui représente le nombre de noeuds.
+        ATTENTION: un nombre trop grand de noeuds peut bloquer le système
+                   et l'empêcher de terminer dans un délai raisonnable.
+
+# politique: un nombre entre 0 et 2; permet de choisir la politique qui
+             détermine le temps d'attente de retransmission d'un noeud.
+
+    0: DoubleWaitPolicy: double chaque fois le temps d'attente
+    1: DoubleWaitDeltaPolicy: double le temps d'attente ±10% de la nouvelle valeur
+    2: FibonnaciPolicy: suit les valeurs de la suite de fibonnaci pour
+                        choisir le prochain temps d'attente.
